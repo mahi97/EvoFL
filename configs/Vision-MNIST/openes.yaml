@@ -1,0 +1,61 @@
+algo: "es"
+problem: "vision"
+
+dataset: "MNIST"
+dist: "IID" # IID, NON-IID, ONE, TWO
+pholder: [1, 28, 28, 1]
+num_classes: 10
+
+
+#train:
+n_rounds: 10000
+
+strategy: "MahiES"
+batch_size: 512
+pop_size: 64
+opt_name: "adam"
+sigma_init: 0.03
+sigma_decay: 0.999
+sigma_limit: 0.01
+init_min: 0.0
+init_max: 0.0
+clip_min: -10
+clip_max: 10
+
+lrate_init: 0.04
+lrate_decay: 0.999
+lrate_limit: 0.001
+beta_1: 0.99
+beta_2: 0.999
+eps: 1e-8
+momentum_es: 0.9
+
+
+#fitness
+maximize: true
+centered_rank: true
+z_score: false
+w_decay: 0.0
+
+network_name: "CNN"
+network_config:
+  depth_1: 1
+  depth_2: 1
+  features_1: 8
+  features_2: 16
+  kernel_1: 5
+  kernel_2: 5
+  strides_1: 1
+  strides_2: 1
+  num_linear_layers: 0
+  num_output_units: 10
+
+
+#device:
+num_devices: 1
+#device_type: "gpu"
+
+mahi_lrate: 19.728046152269378
+mahi_l1: 0.001
+mahi_momentum: 0.8
+comp_iter: 500

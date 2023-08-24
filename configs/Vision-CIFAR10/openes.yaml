@@ -1,0 +1,56 @@
+algo: "es"
+problem: "vision"
+
+#task:
+dataset: "CIFAR10"
+dist: "NON-IID" # IID, NON-IID, ONE, TWO
+pholder: [1, 32, 32, 3]
+num_classes: 10
+
+#train:
+n_rounds: 10000
+strategy: "OpenES"
+#es_config:
+batch_size: 32
+pop_size: 32
+opt_name: "adam"
+#es_params:
+sigma_init: 0.03
+sigma_decay: 0.999
+sigma_limit: 0.01
+init_min: 0.0
+init_max: 0.0
+clip_min: -10
+clip_max: 10
+#opt_params:
+lrate_init: 0.04
+lrate_decay: 0.999
+lrate_limit: 0.001
+beta_1: 0.99
+beta_2: 0.999
+eps: 1e-8
+
+#fitness_config:
+maximize: true
+centered_rank: true
+z_score: false
+w_decay: 0.0
+
+network_name: "CNN"
+network_config:
+  depth_1: 1
+  depth_2: 1
+  features_1: 64
+  features_2: 128
+  kernel_1: 5
+  kernel_2: 5
+  strides_1: 1
+  strides_2: 1
+  num_linear_layers: 1
+  num_hidden_units: 256
+  num_output_units: 10
+
+
+device:
+  num_devices: 2
+  device_type: "gpu"

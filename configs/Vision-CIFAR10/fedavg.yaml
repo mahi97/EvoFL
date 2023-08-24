@@ -1,0 +1,36 @@
+algo: "fedavg"
+problem: "vision"
+
+#task:
+n_rounds: 1000
+dataset: "cifar10"
+dist: "NON-IID" # IID, NON-IID, ONE, TWO
+pholder: [1, 32, 32, 3]
+num_classes: 10
+n_clients: 5
+
+#train:
+batch_size: 128
+opt_name: "adam"
+lr: 0.0009803676951122668
+momentum: 0.6131648308582733
+client_epoch: 10
+
+network_name: "CNN"
+network_config:
+  depth_1: 1
+  depth_2: 1
+  features_1: 64
+  features_2: 128
+  kernel_1: 5
+  kernel_2: 5
+  strides_1: 1
+  strides_2: 1
+  num_linear_layers: 1
+  num_hidden_units: 256
+  num_output_units: 10
+
+
+##device:
+#num_devices: 1
+#device_type: "gpu"

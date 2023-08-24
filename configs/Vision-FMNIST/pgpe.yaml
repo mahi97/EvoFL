@@ -1,0 +1,57 @@
+algo: "es"
+problem: "vision"
+
+#task:
+dataset: "FMNIST"
+dist: "NON-IID" # IID, NON-IID, ONE, TWO
+pholder: [1, 28, 28, 1]
+num_classes: 10
+
+#train:
+n_rounds: 1000
+
+strategy: "PGPE"
+batch_size: 128
+pop_size: 100
+opt_name: "adam"
+sigma_init: 0.05
+sigma_decay: 0.999
+sigma_limit: 0.01
+sigma_lrate: 0.2
+sigma_max_change: 0.2
+init_min: -0.1
+init_max: 0.1
+clip_min: -10
+clip_max: 10
+
+lrate_init: 0.05
+lrate_decay: 0.999
+lrate_limit: 0.01
+beta_1: 0.99
+beta_2: 0.999
+eps: 1e-8
+
+
+#fitness
+maximize: true
+centered_rank: true
+z_score: false
+w_decay: 0.0
+
+network_name: "CNN"
+network_config:
+  depth_1: 1
+  depth_2: 1
+  features_1: 8
+  features_2: 16
+  kernel_1: 5
+  kernel_2: 5
+  strides_1: 1
+  strides_2: 1
+  num_linear_layers: 0
+  num_output_units: 10
+
+
+#device:
+num_devices: 1
+device_type: "gpu"

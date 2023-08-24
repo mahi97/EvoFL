@@ -1,0 +1,30 @@
+algo: "fedavg"
+problem: "vision"
+
+#task:
+n_rounds: 1000
+dataset: "fashion_mnist"
+dist: "NON-IID" # IID, NON-IID, ONE, TWO
+pholder: [1, 28, 28, 1]
+num_classes: 10
+n_clients: 100
+
+#train:
+batch_size: 512
+opt_name: "sgd"
+lr: 0.011149277202806797
+momentum: 0.8099114269439881
+client_epoch: 1
+
+network_name: "CNN"
+network_config:
+  depth_1: 1
+  depth_2: 1
+  features_1: 8
+  features_2: 16
+  kernel_1: 5
+  kernel_2: 5
+  strides_1: 1
+  strides_2: 1
+  num_linear_layers: 0
+  num_output_units: 10

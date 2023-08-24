@@ -1,0 +1,69 @@
+algo: "fedavg"
+problem: "vision"
+
+#task:
+n_rounds: 1000
+dataset: "cifar100"
+dist: "NON-IID" # IID, NON-IID, ONE, TWO
+pholder: [1, 32, 32, 3]
+num_classes: 100
+n_clients: 5
+parts: 40
+
+
+#train:
+batch_size: 64
+opt_name: "adam"
+lr: 0.0002
+momentum: 0.63
+client_epoch: 20
+
+network_name: "CNN"
+network_config:
+  depth_1: 1
+  depth_2: 1
+  features_1: 64
+  features_2: 128
+  kernel_1: 5
+  kernel_2: 5
+  strides_1: 1
+  strides_2: 1
+  num_linear_layers: 1
+  num_hidden_units: 256
+  num_output_units: 100
+
+#es
+strategy: "OpenES"
+#batch_size: 64
+pop_size: 32
+#opt_name: "adam"
+sigma_init: 0.03 #471933482300394
+sigma_decay: 0.999 #0005408072657758
+sigma_limit: 0.01 #0.27
+init_min: 0.0
+init_max: 0.0
+clip_min: -10
+clip_max: 10
+momentum_es: 0.9
+
+lrate_init: 0.04
+lrate_decay: 0.999
+lrate_limit: 0.001
+beta_1: 0.99
+beta_2: 0.999
+eps: 1e-8
+sigma_lrate: 0.2
+sigma_max_change: 0.2
+
+
+
+#fitness
+maximize: true
+centered_rank: true
+z_score: false
+w_decay: 0.0
+
+
+#device:
+num_devices: 1
+device_type: "gpu"

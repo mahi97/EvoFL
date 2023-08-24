@@ -1,0 +1,67 @@
+algo: "fedmahi"
+problem: "vision"
+
+#task:
+n_rounds: 1000
+dataset: "mnist"
+dist: "NON-IID" # IID, NON-IID, ONE, TWO
+pholder: [1, 28, 28, 1]
+num_classes: 10
+n_clients: 5
+
+#train:
+batch_size: 256
+opt_name: "sgd"
+lr: 0.087310371216762
+momentum: 0.9074430532989942
+momentum_es: 0.9
+
+client_epoch: 20
+
+network_name: "CNN"
+network_config:
+  depth_1: 1
+  depth_2: 1
+  features_1: 8
+  features_2: 16
+  kernel_1: 5
+  kernel_2: 5
+  strides_1: 1
+  strides_2: 1
+  num_linear_layers: 0
+  num_output_units: 10
+
+#es
+strategy: "OpenES"
+#batch_size: 64
+pop_size: 1024 #128
+#opt_name: "adam"
+sigma_init: 0.35 #471933482300394
+sigma_decay: 0.9995 #0005408072657758
+sigma_limit: 0.27
+init_min: 0.0
+init_max: 0.0
+clip_min: -100
+clip_max: 100
+
+lrate_init: 0.04265945973415419
+lrate_decay: 0.999
+lrate_limit: 0.001
+beta_1: 0.99
+beta_2: 0.999
+eps: 1e-8
+sigma_lrate: 0.2
+sigma_max_change: 0.2
+
+
+
+#fitness
+maximize: true
+centered_rank: true
+z_score: false
+w_decay: 0.01519011431032822
+
+
+#device:
+num_devices: 1
+device_type: "gpu"
