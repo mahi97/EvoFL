@@ -4,5 +4,8 @@
 
 # EvoFed ~ Evolutionary Federated Learning
 
-## Introduction
+## Setup
 
+```
+pip install -U "jax[cuda12]" chex flas tensorflow_datasets tensorflow wandb numpy tqdm 
+```
