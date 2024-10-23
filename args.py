@@ -20,7 +20,7 @@ def get_args():
     parser.add_argument(
         "--config",
         type=str,
-        default="./configs/Vision-MNIST/openes.yaml",
+        default="./configs/Vision-FMNIST/evofed.yaml",
         # default="./configs/CartPole-v1/es.yaml",
         help="Path to configuration yaml.",
     )

@@ -1,8 +1,5 @@
 import jax.numpy as jnp
 from evosax import Strategies, NetworkMapper
-import gymnax
-from brax import envs
-
 
 def get_network_and_pholder(task, args):
     if task in ['MNIST', 'FMNIST']:
@@ -32,72 +29,6 @@ def get_network_and_pholder(task, args):
             num_hidden_units=256,
             num_output_units=10,
         ), jnp.zeros((1, 32, 32, 3))
-    elif task in ['CartPole-v1', 'Acrobot-v1', 'MountainCar-v0', 'Asterix-MinAtar']:
-        env, env_param = gymnax.make(task)
-        pholder = jnp.zeros(env.observation_space(env_param).shape)
-        print(env.observation_space(env_param).shape, env.num_actions)
-        if args.recurrent:
-            network = NetworkMapper["LSTM"](
-                num_hidden_units=32,
-                num_output_units=env.num_actions,
-                output_activation="categorical",
-            )
-        else:
-            network = NetworkMapper["MLP"](
-                num_hidden_units=64,
-                num_hidden_layers=2,
-                num_output_units=env.num_actions,
-                hidden_activation="relu",
-                output_activation="categorical",
-            )
-        return network, pholder
-    elif task == ['Pendulum-v1', 'MountainCarContinuous-v0']:
-        env, env_param = gymnax.make(task)
-        pholder = jnp.zeros(env.observation_space(env_param).shape)
-        if args.recurrent:
-            network = NetworkMapper["LSTM"](
-                num_hidden_units=32,
-                num_output_units=env.num_actions,
-                output_activation="gaussian",
-            )
-        else:
-            network = NetworkMapper["MLP"](
-                num_hidden_units=64,
-                num_hidden_layers=2,
-                num_output_units=env.num_actions,
-                hidden_activation="relu",
-                output_activation="gaussian",
-            )
-        return network, pholder
-    elif task in [
-            "ant",
-            "halfcheetah",
-            "hopper",
-            "humanoid",
-            "reacher",
-            "walker2d",
-            "fetch",
-            "grasp",
-            "ur5e",
-        ]:
-        env = envs.create(env_name=task)
-        pholder = jnp.zeros((1, env.observation_size))
-
-        if args.recurrent:
-            network = NetworkMapper["LSTM"](
-                num_hidden_units=32,
-                num_output_units=env.action_size,
-                output_activation="tanh",
-            )
-        else:
-            network = NetworkMapper["MLP"](
-                num_hidden_units=32,
-                num_hidden_layers=4,
-                num_output_units=env.action_size,
-                hidden_activation="tanh",
-                output_activation="tanh",
-            )
-        return network, pholder
     else:
         print('ERROR Task is not supported')
 

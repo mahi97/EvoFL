@@ -1,18 +1,17 @@
 import chex
 import jax
 import jax.numpy as jnp  # JAX NumPy
-import tensorflow_datasets as tfds  # TFDS for MNIST
 import wandb
-from evosax import NetworkMapper
 from backprop import sl
 from args import get_args
 from utils import helpers, evo
 from evosax import NetworkMapper, ParameterReshaper, FitnessShaper
-from flax.core import FrozenDict
-
+from tqdm import tqdm
 import os
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+os.environ['CUDA_VISIBLE_DEVICES'] = "0"
+os.environ['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false' # default 'true' for XLA to work with JAX
 
 # cosine distance
 def cosine(x, y):
@@ -64,14 +63,11 @@ def dequantize(array, min_val, max_val, n_bits):
 
 class TaskManager:
     def __init__(self, rng: chex.PRNGKey, args):
-        wandb.run.name = '{}-{}-{} b{} c{} s{} p{} r{} q{} -- {}' \
+        wandb.run.name = '{}-{}-{} b{} c{} s{} -- {}' \
             .format(args.dataset, args.algo,
                     args.dist,
                     args.batch_size, args.n_clients,
                     args.seed,
-                    args.percentage,
-                    args.rank_factor,
-                    args.quantize_bits,
                     wandb.run.id)
         wandb.run.save()
         # self.train_ds, self.test_ds = sl.get_datasets_non_iid(args.dataset, args.n_clients) \
@@ -94,7 +90,7 @@ class TaskManager:
         self.server = server.replace(mean=self.test_param_reshaper.network_to_flat(self.state.params))
         del init_rng  # Must not be used anymore.
 
-        self.param_count = sum(x.size for x in jax.tree_leaves(self.state.params))
+        self.param_count = sum(x.size for x in jax.tree_util.tree_leaves(self.state.params))
         self.num_epochs = wandb.config.n_rounds
         self.batch_size = wandb.config.batch_size
         self.n_clients = args.n_clients
@@ -103,10 +99,9 @@ class TaskManager:
         self.X = jnp.array([train['image'][:min_cut] for train in self.train_ds])
         self.y = jnp.array([train['label'][:min_cut] for train in self.train_ds])
         self.args = args
-        self.n_bits = args.quantize_bits
 
     def run(self, rng: chex.PRNGKey):
-        for epoch in range(0, self.num_epochs + 1):
+        for epoch in tqdm(range(0, self.num_epochs + 1)):
 
             rng, input_rng, rng_ask = jax.random.split(rng, 3)
             clients, _, _ = jax.vmap(sl.train_epoch, in_axes=(None, 0, 0, None, None))(self.state,
@@ -125,7 +120,7 @@ class TaskManager:
             # fitness = sparsify(fitness, self.args.percentage)
             origin = self.server.mean.copy()
             self.server = self.strategy.tell(x, fitness, self.server, self.es_params)
-            self.state = self.state.replace(params=FrozenDict(self.test_param_reshaper.reshape_single_net(self.server.mean)))
+            self.state = self.state.replace(params=self.test_param_reshaper.reshape_single_net(self.server.mean))
             # sl.update_learning_rate(self.state, epoch)
 
             rng, eval_rng = jax.random.split(rng)
@@ -138,7 +133,7 @@ class TaskManager:
                 'Compression Error': jnp.mean((self.server.mean - target_server)**2),
                 # 'Communication': epoch * 2 * self.args.pop_size * (1 - self.args.percentage) * (1 + np.log2(self.args.pop_size)),
                 # 'Communication': epoch * 4 * self.args.pop_size * (1 - self.args.percentage) * (np.log2(self.args.pop_size * np.sqrt((1 - self.args.percentage) * 1/self.args.rank_factor))),
-                'Communication': epoch * 2 * self.args.pop_size * (1 - self.args.percentage) * ((self.n_bits + jnp.log2(self.args.pop_size))/ 32),
+                'Communication': epoch * 2 * self.args.pop_size * (1 - self.args.percentage) * ((64 + jnp.log2(self.args.pop_size))/ 32),
             })
 
 

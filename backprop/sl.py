@@ -4,6 +4,7 @@ from flax.training import train_state  # Useful dataclass to keep train state
 import optax  # Optimizers
 import tensorflow_datasets as tfds  # TFDS for MNIST
 import wandb
+import numpy as np
 
 optimizer = {
     'adam': optax.adam,

@@ -62,7 +62,7 @@ class TaskManager:
         self.state = sl.create_train_state(init_rng, network, self.learning_rate, self.momentum)
         self.param_reshaper = ParameterReshaper(self.state.params, n_devices=num_devices)
         self.test_param_reshaper = ParameterReshaper(self.state.params, n_devices=1)
-        self.param_count = sum(x.size for x in jax.tree_leaves(self.state.params))
+        self.param_count = sum(x.size for x in jax.tree_util.tree_leaves(self.state.params))
         self.parts = args.parts
         self.padding = self.parts - self.param_reshaper.total_params % self.parts
         self.strategy, self.es_params = evo.get_strategy_and_params(args.pop_size, (self.param_reshaper.total_params + self.padding) // self.parts, args)

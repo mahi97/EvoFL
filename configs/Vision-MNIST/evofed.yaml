@@ -16,6 +16,9 @@ lr: 0.087310371216762
 momentum: 0.9074430532989942
 momentum_es: 0.9
 
+percentage: 1.0
+rank_factor: 1
+
 client_epoch: 20
 
 network_name: "CNN"
