@@ -1,0 +1,8 @@
+jax~=0.4.35
+wandb~=0.18.5
+chex~=0.1.87
+flax~=0.10.0
+numpy~=2.1.2
+optax~=0.2.3
+tensorflow-datasets~=4.9.6
+setuptools~=75.1.0
