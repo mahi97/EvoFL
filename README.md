@@ -77,7 +77,7 @@ python evofed.py --config configs/Vision-CIFAR10/evofed.yaml
 |---|---|---|
 | `--config` | `configs/Vision-FMNIST/evofed.yaml` | Path to YAML config file |
 | `--seed` | `0` | Random seed for reproducibility |
-| `--log-dir` | `/tmp/gym/` | Directory for agent logs |
+| `--log-dir` | `/tmp/gym/` | Directory for experiment logs |
 
 ---
 
