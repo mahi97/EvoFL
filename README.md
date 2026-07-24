@@ -23,30 +23,47 @@
 
 ## Installation
 
+Dependencies are declared in **`pyproject.toml`** and installed with **[uv](https://github.com/astral-sh/uv)** (no `requirements.txt`).
+
 ### Requirements
 
-- Python ≥ 3.9
-- CUDA 12 (for GPU acceleration)
+- Python ≥ 3.10 (3.12 recommended)
+- [uv](https://docs.astral.sh/uv/) (installed automatically by `./install.sh` if missing)
+- CUDA 12 optional (GPU)
 
-### Step 1 — Install JAX with GPU support
-
-```bash
-pip install -U "jax[cuda12]"
-```
-
-> For CPU-only or other CUDA versions see the [JAX installation guide](https://github.com/google/jax#installation).
-
-### Step 2 — Install remaining dependencies
+### One-command setup
 
 ```bash
-pip install -r requirements.txt
+./install.sh              # CPU JAX (default)
+./install.sh --cuda12     # NVIDIA CUDA 12
+./install.sh --tpu        # TPU (core sync + jax[tpu] overlay)
 ```
-
-### Step 3 — (Optional) Install the package locally
 
 ```bash
-pip install -e .
+source .venv/bin/activate
+# or: uv run python evofed.py --config configs/Vision-FMNIST/evofed.yaml
 ```
+
+| Flag | Description |
+|---|---|
+| `--cpu` | CPU-only JAX (default) |
+| `--cuda12` | JAX CUDA 12 wheels |
+| `--cuda12-local` | Local CUDA 12 toolkit |
+| `--tpu` | TPU |
+| `--python 3.12` | Python for the venv |
+| `--no-verify` | Skip post-install checks |
+
+### Manual install with uv
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh   # if needed
+
+uv sync                        # CPU
+uv sync --extra cuda12         # GPU
+uv run python evofed.py --config configs/Vision-FMNIST/evofed.yaml
+```
+
+> Other platforms: [JAX installation guide](https://github.com/google/jax#installation).
 
 ---
 
@@ -168,8 +185,8 @@ EvoFL/
 ├── quantization.py             # Quantization utilities
 ├── sparsification.py           # Sparsification utilities
 ├── args.py                     # CLI argument parsing
-├── requirements.txt
-└── setup.py
+├── pyproject.toml              # Project metadata & dependencies (uv)
+└── install.sh                  # One-shot uv environment setup
 ```
 
 ---
